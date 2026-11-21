@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Простишь меня?</title>
+    <title>Для тебя...</title>
     <style>
+        /* --- ОБЩИЕ СТИЛИ --- */
         body {
             margin: 0;
             padding: 0;
@@ -14,9 +15,106 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #ff9a9e, #fad0c4);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; 
+            overflow: hidden; /* Чтобы сердечки не создавали скролл */
             text-align: center;
         }
+
+        /* --- ЭКРАН 1: КОНВЕРТ --- */
+        #envelopeScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            cursor: pointer;
+            perspective: 1000px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #ff4d6d;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(255, 105, 135, 0.4);
+        }
+
+        /* Клапан конверта */
+        .flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 0; height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #e63956;
+            border-radius: 10px 10px 0 0;
+            transform-origin: top;
+            transition: transform 0.6s ease, z-index 0s 0.3s;
+            z-index: 3;
+        }
+
+        /* Письмо внутри */
+        .letter {
+            position: absolute;
+            top: 10px; left: 15px;
+            width: 270px; height: 180px;
+            background: #fff;
+            border-radius: 10px;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            transition: transform 0.6s ease 0.3s;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Передняя часть конверта (карман) */
+        .pocket {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 300px; height: 200px;
+            background: #ff4d6d;
+            border-radius: 10px;
+            clip-path: polygon(0 0, 50% 40%, 100% 0, 100% 100%, 0 100%);
+            z-index: 4;
+        }
+
+        /* Анимация открытия конверта */
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+        .envelope.open .letter {
+            transform: translateY(-100px);
+        }
+
+        .hint-text {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        /* --- ЭКРАН 2: ОСНОВНАЯ ОТКРЫТКА --- */
         .card {
             background: white;
             padding: 40px 30px;
@@ -26,13 +124,24 @@
             max-width: 400px;
             position: relative;
             z-index: 10;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
+
+        .card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         h1 {
             color: #ff4d6d;
             margin-bottom: 30px;
             font-size: 2rem;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
         }
+
         .gif-container img {
             width: 200px;
             height: 200px;
@@ -41,13 +150,15 @@
             margin-bottom: 20px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
+
         .buttons {
             display: flex;
             justify-content: center;
             gap: 20px;
             position: relative;
-            height: 60px; 
+            height: 60px;
         }
+
         button {
             padding: 15px 35px;
             font-size: 1.3rem;
@@ -58,110 +169,216 @@
             transition: transform 0.2s ease, background-color 0.2s;
             box-shadow: 0 5px 15px rgba(0,0,0,0.15);
         }
+
         #yesBtn {
             background-color: #ff4d6d;
             color: white;
+            z-index: 10;
         }
+
         #yesBtn:hover {
             background-color: #c9184a;
             transform: scale(1.1);
         }
+
         #noBtn {
             background-color: #f0f0f0;
             color: #666;
-            position: absolute; 
+            position: absolute;
             left: 50%;
-            transform: translateX(50%); 
+            transform: translateX(50%);
             z-index: 20;
         }
-        .hidden {
-            display: none !important;
-        }
+
+        /* --- ЭКРАН 3: УСПЕХ --- */
         #successMessage {
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
+
+        #successMessage.show {
+            display: flex;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
         #successMessage h2 {
             color: #ff4d6d;
             font-size: 1.8rem;
         }
+
+        /* --- СЕРДЕЧКИ --- */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            animation: explode 2s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% { 
+                transform: translate(-50%, -50%) scale(0.5); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.5) rotate(45deg); 
+                opacity: 0; 
+            }
+        }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="card" id="mainCard">
-        
+    <!-- ЭКРАН 1: КОНВЕРТ -->
+    <div id="envelopeScreen">
+        <div class="envelope-wrapper" id="envelopeWrapper">
+            <div class="envelope" id="envelope">
+                <div class="letter">💌</div>
+                <div class="flap"></div>
+                <div class="pocket"></div>
+            </div>
+        </div>
+        <div class="hint-text">Нажми на конверт, дорогушка 👆</div>
+    </div>
+
+    <!-- ЭКРАН 2: ОСНОВНАЯ ОТКРЫТКА -->
+    <div class="card hidden" id="mainCard">
         <div class="gif-container">
             <img id="mainGif" src="cat-smile-kitty-smile.gif" alt="Mimi">
         </div>
-        <h1 id="question">Простишь меня? 🥺</h1>
+        <h1 id="question">Тюльпанчик мой, ты простишь меня? 🥺</h1>
         <div class="buttons">
             <button id="yesBtn">Да ❤️</button>
             <button id="noBtn">Нет</button>
         </div>
     </div>
 
-    <!-- Этот блок появится после нажатия "Да" -->
+    <!-- ЭКРАН 3: УСПЕХ -->
     <div id="successMessage" class="card">
         <h2>Урааа! Верил и волновался очееень! 💖</h2>
-        <p style="color: #666; margin-top: 10px;">Я люблю тебя ооочень сильно!!!.</p>
-        <!-- Можешь добавить сюда милую гифку или фото -->
-        <img src="cat-cat-dance.gif" style="width: 150px; margin-top: 20px; border-radius: 15px;" alt="Love">
+        <p style="color: #666; margin-top: 10px;">Я люблю тебя ооочень сильно!!!</p>
+        <img src="cat-cat-dance.gif" style="width: 150px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);" alt="Love">
     </div>
 
     <script>
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
+        // --- 1. ЛОГИКА КОНВЕРТА ---
+        const envelope = document.getElementById('envelope');
+        const envelopeScreen = document.getElementById('envelopeScreen');
         const mainCard = document.getElementById('mainCard');
-        const successMessage = document.getElementById('successMessage');
-        const question = document.getElementById('question');
 
-        // Массив с сообщениями, которые будут появляться при попытке нажать "Нет"
+        envelope.addEventListener('click', () => {
+            // Запускаем анимацию открытия
+            envelope.classList.add('open');
+            
+            // Ждем 1.5 секунды (пока письмо вылетит) и переключаем экраны
+            setTimeout(() => {
+                envelopeScreen.style.opacity = '0';
+                envelopeScreen.style.transform = 'scale(0.9)';
+                
+                setTimeout(() => {
+                    envelopeScreen.classList.add('hidden');
+                    mainCard.classList.remove('hidden');
+                    // Небольшая задержка, чтобы сработал CSS transition
+                    setTimeout(() => {
+                        mainCard.classList.add('show');
+                    }, 50);
+                }, 800); // Время, за которое конверт исчезает
+            }, 1200); 
+        });
+
+        // --- 2. ЛОГИКА УБЕГАЮЩЕЙ КНОПКИ "НЕТ" ---
+        const noBtn = document.getElementById('noBtn');
+        const question = document.getElementById('question');
         const noMessages = [
-            "Ты уверена? 😢",
-            "Так не пойдееет)",
-            "Мяу",
-            "Котенка моя не надооо",
-            "Очень скучаю по тебе...",
-            "НЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕТ(",
-            "А вот нетушки хихихи"
+            "Ты уверена? 😢", "Так не пойдееет)", "Мяу", 
+            "Котенка моя не надооо", "Очень скучаю по тебе...", "НЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕТ(", "А вот нетушки хихихи"
         ];
         let messageIndex = 0;
 
-        // Функция, которая заставляет кнопку "Нет" убегать
         function dodgeButton(e) {
-            // Предотвращаем случайное нажатие на мобильных устройствах
             if (e) e.preventDefault();
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
 
-            // Вычисляем случайную позицию в пределах окна
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-
-            // Применяем новые координаты
             noBtn.style.position = 'fixed';
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
 
-            // Меняем сообщение над вопросом, чтобы добавить интерактива
             if (messageIndex < noMessages.length) {
                 question.textContent = noMessages[messageIndex];
                 messageIndex++;
             }
         }
 
-        // События для мыши и касания (для телефонов)
         noBtn.addEventListener('mouseover', dodgeButton);
         noBtn.addEventListener('touchstart', dodgeButton, { passive: false });
-        // На всякий случай, если пользователь умудрится кликнуть
         noBtn.addEventListener('click', dodgeButton);
 
-        // Обработка нажатия на кнопку "Да"
+        // --- 3. ЛОГИКА КНОПКИ "ДА" И СЕРДЕЧКИ ---
+        const yesBtn = document.getElementById('yesBtn');
+        const successMessage = document.getElementById('successMessage');
+
         yesBtn.addEventListener('click', () => {
-            mainCard.classList.add('hidden');
-            successMessage.style.display = 'flex';
+            // Плавно скрываем основную карточку
+            mainCard.classList.remove('show');
+            
+            setTimeout(() => {
+                mainCard.classList.add('hidden');
+                successMessage.classList.remove('hidden');
+                // Показываем успех с анимацией
+                setTimeout(() => {
+                    successMessage.classList.add('show');
+                }, 50);
+                
+                // Запускаем салют из сердечек
+                createHearts();
+            }, 800); // Ждем, пока карточка исчезнет
         });
+
+        // Функция создания сердечек
+        function createHearts() {
+            const heartsCount = 50; // Количество сердечек
+            const emojis = ['❤️', '💖', '💕', '💘', '💝', '✨'];
+
+            for (let i = 0; i < heartsCount; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart-particle');
+                    heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    // Центр экрана
+                    heart.style.left = '50%';
+                    heart.style.top = '50%';
+                    
+                    // Случайное направление и расстояние
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 400 + 100; // Разлетаются на 100-500px
+                    const x = Math.cos(angle) * distance;
+                    const y = Math.sin(angle) * distance;
+                    
+                    // Передаем координаты в CSS переменные
+                    heart.style.setProperty('--x', `${x}px`);
+                    heart.style.setProperty('--y', `${y}px`);
+                    
+                    // Случайный размер и скорость
+                    heart.style.fontSize = `${Math.random() * 25 + 15}px`;
+                    heart.style.animationDuration = `${Math.random() * 1 + 1.5}s`;
+                    
+                    document.body.appendChild(heart);
+                    
+                    // Удаляем сердечко после анимации
+                    setTimeout(() => heart.remove(), 2500);
+                }, i * 30); // Задержка между появлением каждого сердечка
+            }
+        }
     </script>
 </body>
 </html>
