@@ -188,6 +188,7 @@
             left: 50%;
             transform: translateX(50%);
             z-index: 20;
+            transition: left 0.3s ease, top 0.3s ease, transform 0.3s ease; 
         }
 
         /* --- ЭКРАН 3: УСПЕХ --- */
@@ -302,13 +303,26 @@
             "Котенка моя не надооо", "Очень скучаю по тебе...", "НЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕТ(", "А вот нетушки хихихи"
         ];
         let messageIndex = 0;
+        let isMoved = false; // Флаг, чтобы кнопка вырвалась из карточки только 1 раз
 
         function dodgeButton(e) {
             if (e) e.preventDefault();
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
 
-            noBtn.style.position = 'fixed';
+            // Вырываем кнопку из карточки, чтобы она могла летать по всему экрану
+            if (!isMoved) {
+                document.body.appendChild(noBtn);
+                noBtn.style.transform = 'none'; 
+                noBtn.style.position = 'fixed';
+                isMoved = true;
+            }
+
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+            
+            // Случайные координаты в пределах видимой части экрана
+            const x = Math.random() * (window.innerWidth - btnWidth - 20) + 10;
+            const y = Math.random() * (window.innerHeight - btnHeight - 20) + 10;
+
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
 
@@ -318,9 +332,9 @@
             }
         }
 
-        noBtn.addEventListener('mouseover', dodgeButton);
+        // Используем mouseenter вместо mouseover для более четкой реакции
+        noBtn.addEventListener('mouseenter', dodgeButton);
         noBtn.addEventListener('touchstart', dodgeButton, { passive: false });
-        noBtn.addEventListener('click', dodgeButton);
 
         // --- 3. ЛОГИКА КНОПКИ "ДА" И СЕРДЕЧКИ ---
         const yesBtn = document.getElementById('yesBtn');
