@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Простишь меня?</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Скрываем полосы прокрутки, чтобы кнопка не вылетала за пределы */
+            text-align: center;
+        }
+        .card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 105, 135, 0.3);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            z-index: 10;
+        }
+        h1 {
+            color: #ff4d6d;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        .gif-container img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            height: 60px; /* Фиксируем высоту, чтобы верстка не прыгала */
+        }
+        button {
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+        }
+        #yesBtn:hover {
+            background-color: #c9184a;
+            transform: scale(1.1);
+        }
+        #noBtn {
+            background-color: #f0f0f0;
+            color: #666;
+            position: absolute; /* Важно для убегания */
+            left: 50%;
+            transform: translateX(50%); /* Начальная позиция справа от "Да" */
+            z-index: 20;
+        }
+        .hidden {
+            display: none !important;
+        }
+        #successMessage {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #successMessage h2 {
+            color: #ff4d6d;
+            font-size: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="mainCard">
+        <!-- Замени ссылку на гифку на любую милую или смешную -->
+        <div class="gif-container">
+            <img id="mainGif" src="https://media.tenor.com/ef3X8834_E0AAAAi/tkthao219-bubududu.gif" alt="Mimi">
+        </div>
+        <h1 id="question">Простишь меня? 🥺</h1>
+        <div class="buttons">
+            <button id="yesBtn">Да ❤️</button>
+            <button id="noBtn">Нет</button>
+        </div>
+    </div>
+
+    <!-- Этот блок появится после нажатия "Да" -->
+    <div id="successMessage" class="card">
+        <h2>Урааа! Я знал, что ты самая лучшая! 💖</h2>
+        <p style="color: #666; margin-top: 10px;">Я исправлюсь, обещаю.</p>
+        <!-- Можешь добавить сюда милую гифку или фото -->
+        <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" style="width: 150px; margin-top: 20px; border-radius: 15px;" alt="Love">
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const mainCard = document.getElementById('mainCard');
+        const successMessage = document.getElementById('successMessage');
+        const question = document.getElementById('question');
+
+        // Массив с сообщениями, которые будут появляться при попытке нажать "Нет"
+        const noMessages = [
+            "Ты уверена? 😢",
+            "Пожалуйста...",
+            "Я исправлюсь!",
+            "Ну прости...",
+            "Давай поговорим?",
+            "Я скучаю...",
+            "Не уходи 🥺"
+        ];
+        let messageIndex = 0;
+
+        // Функция, которая заставляет кнопку "Нет" убегать
+        function dodgeButton(e) {
+            // Предотвращаем случайное нажатие на мобильных устройствах
+            if (e) e.preventDefault();
+
+            // Вычисляем случайную позицию в пределах окна
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
+            // Применяем новые координаты
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+
+            // Меняем сообщение над вопросом, чтобы добавить интерактива
+            if (messageIndex < noMessages.length) {
+                question.textContent = noMessages[messageIndex];
+                messageIndex++;
+            }
+        }
+
+        // События для мыши и касания (для телефонов)
+        noBtn.addEventListener('mouseover', dodgeButton);
+        noBtn.addEventListener('touchstart', dodgeButton, { passive: false });
+        // На всякий случай, если пользователь умудрится кликнуть
+        noBtn.addEventListener('click', dodgeButton);
+
+        // Обработка нажатия на кнопку "Да"
+        yesBtn.addEventListener('click', () => {
+            mainCard.classList.add('hidden');
+            successMessage.style.display = 'flex';
+        });
+    </script>
+</body>
+</html>
