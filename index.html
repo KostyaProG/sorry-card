@@ -35,18 +35,25 @@
             width: 300px;
             height: 200px;
             cursor: pointer;
-            perspective: 1000px;
             margin-bottom: 20px;
+            
+            /* По умолчанию делаем конверт уменьшенным (75% от размера) для мобилок */
+            transform: scale(0.75); 
             transition: transform 0.3s;
-        @media (max-width: 400px) {
-            .envelope-wrapper {
-                transform: scale(0.85);
-            }
-        }
         }
 
-        .envelope-wrapper:hover {
-            transform: scale(1.05);
+        /* Это правило вернет конверту нормальный размер на компьютерах и больших экранах */
+        @media (min-width: 500px) {
+            .envelope-wrapper {
+                transform: scale(1);
+            }
+        }
+
+        /* Анимация при наведении (работает только там, где есть мышка) */
+        @media (hover: hover) {
+            .envelope-wrapper:hover {
+                transform: scale(1.05);
+            }
         }
 
         .envelope {
@@ -362,7 +369,9 @@
 
         yesBtn.addEventListener('click', () => {
             // Плавно скрываем основную карточку
+            noBtn.style.display = 'none'; 
             mainCard.classList.remove('show');
+            
             
             setTimeout(() => {
                 mainCard.classList.add('hidden');
