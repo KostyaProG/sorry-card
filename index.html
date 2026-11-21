@@ -154,7 +154,7 @@
         .buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 50px;
             position: relative;
             height: 60px;
         }
@@ -182,13 +182,21 @@
         }
 
         #noBtn {
-            background-color: #f0f0f0;
-            color: #666;
+            background-color: #ffffff; /* Белый фон, чтобы выделялась */
+            color: #ff4d6d; /* Розовый текст в тон кнопке "Да" */
             position: absolute;
-            left: 50%;
-            transform: translateX(50%);
+            left: 75%; /* Сдвинули правее, чтобы было больше воздуха */
+            transform: translateX(-50%);
             z-index: 20;
-            transition: left 0.3s ease, top 0.3s ease, transform 0.3s ease; 
+            border: 2px solid #ff4d6d; /* Красивая обводка */
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.15); /* Легкая тень */
+            /* Оставляем плавный переход для убегания */
+            transition: left 0.3s ease, top 0.3s ease, transform 0.3s ease, background-color 0.2s;
+        }
+
+        /* Добавим эффект при наведении (до того как она убежит) */
+        #noBtn:hover {
+            background-color: #ffe5e9; 
         }
 
         /* --- ЭКРАН 3: УСПЕХ --- */
