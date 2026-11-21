@@ -14,7 +14,7 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #ff9a9e, #fad0c4);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* Скрываем полосы прокрутки, чтобы кнопка не вылетала за пределы */
+            overflow: hidden; 
             text-align: center;
         }
         .card {
@@ -46,7 +46,7 @@
             justify-content: center;
             gap: 20px;
             position: relative;
-            height: 60px; /* Фиксируем высоту, чтобы верстка не прыгала */
+            height: 60px; 
         }
         button {
             padding: 15px 35px;
@@ -69,9 +69,9 @@
         #noBtn {
             background-color: #f0f0f0;
             color: #666;
-            position: absolute; /* Важно для убегания */
+            position: absolute; 
             left: 50%;
-            transform: translateX(50%); /* Начальная позиция справа от "Да" */
+            transform: translateX(50%); 
             z-index: 20;
         }
         .hidden {
@@ -92,9 +92,9 @@
 <body>
 
     <div class="card" id="mainCard">
-        <!-- Замени ссылку на гифку на любую милую или смешную -->
+        
         <div class="gif-container">
-            <img id="mainGif" src="https://media.tenor.com/ef3X8834_E0AAAAi/tkthao219-bubududu.gif" alt="Mimi">
+            <img id="mainGif" src="https://tenor.com/ru/view/cat-smile-kitty-smile-puss-smile-gif-4760874273861776298" alt="Mimi">
         </div>
         <h1 id="question">Простишь меня? 🥺</h1>
         <div class="buttons">
@@ -105,8 +105,8 @@
 
     <!-- Этот блок появится после нажатия "Да" -->
     <div id="successMessage" class="card">
-        <h2>Урааа! Я знал, что ты самая лучшая! 💖</h2>
-        <p style="color: #666; margin-top: 10px;">Я исправлюсь, обещаю.</p>
+        <h2>Урааа! Верил и волновался очееень! 💖</h2>
+        <p style="color: #666; margin-top: 10px;">Я люблю тебя ооочень сильно!!!.</p>
         <!-- Можешь добавить сюда милую гифку или фото -->
         <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" style="width: 150px; margin-top: 20px; border-radius: 15px;" alt="Love">
     </div>
@@ -121,12 +121,12 @@
         // Массив с сообщениями, которые будут появляться при попытке нажать "Нет"
         const noMessages = [
             "Ты уверена? 😢",
-            "Пожалуйста...",
-            "Я исправлюсь!",
-            "Ну прости...",
-            "Давай поговорим?",
-            "Я скучаю...",
-            "Не уходи 🥺"
+            "Так не пойдееет)",
+            "Мяу",
+            "Котенка моя не надооо",
+            "Очень скучаю по тебе...",
+            "НЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕТ(",
+            "А вот нетушки хихихи"
         ];
         let messageIndex = 0;
 
