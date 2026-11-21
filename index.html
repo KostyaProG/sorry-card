@@ -260,6 +260,34 @@
         }
 
         .hidden { display: none !important; }
+         @media (max-width: 500px) {
+            .card {
+                padding: 20px 15px; /* Уменьшаем внутренние отступы (было 30px 20px) */
+                width: 90%;         /* Чуть шире, но за счет отступов будет аккуратнее */
+                max-width: 320px;   /* Ограничиваем максимальную ширину, чтобы не растягивалась */
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;  /* Уменьшаем заголовок (было 1.8rem) */
+                margin-bottom: 15px; /* Меньше отступ снизу */
+            }
+
+            .gif-container img {
+                width: 140px;       /* Уменьшаем гифку (было 180px) */
+                height: 140px;
+                margin-bottom: 15px;
+            }
+
+            button {
+                padding: 10px 25px; /* Кнопки делаем чуть меньше */
+                font-size: 1.1rem;
+            }
+            
+            .buttons {
+                gap: 15px;          /* Чуть меньше расстояние между кнопками */
+            }
+        }
     </style>
 </head>
 <body>
