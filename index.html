@@ -154,7 +154,8 @@
         .buttons {
             display: flex;
             justify-content: center;
-            gap: 50px;
+            align-items: center;
+            gap: 30px; /* Отступ между кнопками */
             position: relative;
             height: 60px;
         }
@@ -182,16 +183,17 @@
         }
 
         #noBtn {
-            background-color: #ffffff; /* Белый фон, чтобы выделялась */
-            color: #ff4d6d; /* Розовый текст в тон кнопке "Да" */
-            position: absolute;
-            left: 75%; /* Сдвинули правее, чтобы было больше воздуха */
-            transform: translateX(-50%);
-            z-index: 20;
-            border: 2px solid #ff4d6d; /* Красивая обводка */
-            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.15); /* Легкая тень */
-            /* Оставляем плавный переход для убегания */
+            background-color: #ffffff;
+            color: #ff4d6d;
+            border: 2px solid #ff4d6d;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.15);
+            /* ВОТ ГЛАВНЫЕ ИЗМЕНЕНИЯ: */
+            position: relative; /* Теперь она стоит на своем месте в ряду */
+            left: 0; 
+            transform: none; /* Убрали сдвиги */
+            /* Оставляем плавность для JS */
             transition: left 0.3s ease, top 0.3s ease, transform 0.3s ease, background-color 0.2s;
+            z-index: 20;
         }
 
         /* Добавим эффект при наведении (до того как она убежит) */
